@@ -1,7 +1,6 @@
 package com.khlud.ciprian.tranj.builders;
 
 import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.khlud.ciprian.tranj.classesmodel.FileModel;
@@ -9,10 +8,8 @@ import com.khlud.ciprian.tranj.classesmodel.FileModelBuilder;
 import com.khlud.ciprian.tranj.classesmodel.Module;
 
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Created by cipriankhlud on 19/10/2016.
@@ -28,20 +25,28 @@ public class ModelBuilder {
     }
 
     public void process() {
+        start = System.currentTimeMillis();
 
         String[] files = FolderUtils.getDirectoryFiles(pathToScan, file -> file.getName().endsWith(".java"));
+        List<String> fileList = Arrays.asList(files);
+        System.out.println("Preregister files");
+        fileList.parallelStream()
+                .map(this::fileToCompilationUnit)
+                .forEach(this::preRegisterTypes);
 
-        List<CompilationUnit> compilationUnits
-                = Arrays.stream(files)
-                        .map(this::fileToCompilationUnit)
-                        .collect(Collectors.toList());
-        compilationUnits.forEach(this::preRegisterTypes);
-        compilationUnits.forEach(
-                compilationUnit -> processFile(compilationUnit)
-        );
+        System.out.println("Process files");
+        fileList.stream()
+                .map(this::fileToCompilationUnit)
+                .forEach(
+                        compilationUnit -> processFile(compilationUnit)
+                );
     }
 
-    private void preRegisterTypes(CompilationUnit compilationUnit) {
+    long start, current, countFiles;
+    synchronized private void preRegisterTypes(CompilationUnit compilationUnit) {
+        if(compilationUnit==null){
+            return;
+        }
         compilationUnit.getChildrenNodes()
                 .stream()
                 .filter(node -> node instanceof ClassOrInterfaceDeclaration)
@@ -51,7 +56,14 @@ public class ModelBuilder {
                     module.moduleTypeResolver.registerClassType(packageName,
                             decl.getName());
                 });
-        ;
+        countFiles++;
+        current = System.currentTimeMillis();
+        if(current-start>=1000){
+            System.out.println("Files per second: "+countFiles);
+            countFiles = 0;
+
+            start = current;
+        }
     }
 
     public static String getPackageName(CompilationUnit compilationUnit) {
@@ -70,13 +82,16 @@ public class ModelBuilder {
             CompilationUnit cu = JavaParser.parse(in);
 
             return cu;
-        } catch (ParseException | IOException e) {
-            e.printStackTrace();
+        } catch (Throwable e) {
+            System.out.println("Error parsing file: "+ file);
         }
         return null;
     }
 
     private void processFile(CompilationUnit cu) {
+        if(cu==null){
+            return;
+        }
         FileModel fileModel = FileModelBuilder.build(cu, module);
     }
 

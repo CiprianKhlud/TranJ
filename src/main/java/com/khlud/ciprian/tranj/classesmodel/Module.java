@@ -14,7 +14,7 @@ public class Module {
     public String version;
     public String name;
     public List<ClassModel> classes = new ArrayList<>();
-    public List<Interface> interfaces = new ArrayList<>();
+    public List<InterfaceModel> interfaces = new ArrayList<>();
 
     public List<FileModel> files = new ArrayList<>();
 
@@ -26,8 +26,8 @@ public class Module {
         return result;
     }
 
-    public Interface createInterface(String name, String packageName) {
-        Interface result = new Interface();
+    public InterfaceModel createInterface(String name, String packageName) {
+        InterfaceModel result = new InterfaceModel();
         result.name = name;
         result.packageName = packageName;
         interfaces.add(result);

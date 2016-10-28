@@ -90,6 +90,6 @@ public class FileModelBuilder {
     }
 
     private static void processInterface(FileModel result, ClassOrInterfaceDeclaration classOrInterfaceDeclaration) {
-        Interface anInterface = result.module.createInterface(classOrInterfaceDeclaration.getName(), result.packageName);
+        InterfaceModel anInterface = result.module.createInterface(classOrInterfaceDeclaration.getName(), result.packageName);
     }
 }

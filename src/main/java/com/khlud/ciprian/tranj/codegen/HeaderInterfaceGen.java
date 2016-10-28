@@ -1,6 +1,6 @@
 package com.khlud.ciprian.tranj.codegen;
 
-import com.khlud.ciprian.tranj.classesmodel.ClassModel;
+import com.khlud.ciprian.tranj.classesmodel.InterfaceModel;
 import com.khlud.ciprian.tranj.classesmodel.Method;
 import com.khlud.ciprian.tranj.classesmodel.Variable;
 import com.khlud.ciprian.tranj.resolvers.ResolvedType;
@@ -10,17 +10,16 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Created by Ciprian on 10/19/2016.
+ * Created by Ciprian on 10/28/2016.
  */
-public class HeaderClassGen {
-
+public class HeaderInterfaceGen {
     TextGen textGen;
 
-    public HeaderClassGen(File ouputDir) {
+    public HeaderInterfaceGen(File ouputDir) {
         textGen = new TextGen(ouputDir);
     }
 
-    public void writeCode(ClassModel classModel, String fileName) {
+    public void writeCode(InterfaceModel classModel, String fileName) {
         textGen.fileName = fileName;
 
         writeIfndefCode(classModel);
@@ -34,19 +33,16 @@ public class HeaderClassGen {
         textGen.writeToDisk();
     }
 
-    private void writeClassHeader(ClassModel classModel) {
+    private void writeClassHeader(InterfaceModel classModel) {
+
         textGen.writePackage(classModel);
         textGen.write(textGen.indentText);
         textGen.indentCount++;
 
         textGen.write("struct ");
         textGen.write(classModel.name);
-        if (classModel.baseClass != null) {
-            textGen.write(": public ");
-        }
         textGen.indent();
 
-        writeVariables(classModel.variables);
         writeMethods(classModel.methods);
 
         textGen.unindent("};");
@@ -99,7 +95,7 @@ public class HeaderClassGen {
         return returnTypeName;
     }
 
-    private void writeIfndefCode(ClassModel classModel) {
+    private void writeIfndefCode(InterfaceModel classModel) {
 
         String defineItem = definitionHeader(classModel);
 
@@ -112,7 +108,7 @@ public class HeaderClassGen {
         textGen.writeLine();
     }
 
-    public String definitionHeader(ClassModel classModel) {
+    public String definitionHeader(InterfaceModel classModel) {
         return classModel.buildBaseName() + "_H";
     }
 

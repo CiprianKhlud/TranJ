@@ -1,6 +1,6 @@
 package com.khlud.ciprian.tranj.codegen;
 
-import com.khlud.ciprian.tranj.classesmodel.ClassModel;
+import com.khlud.ciprian.tranj.classesmodel.NameDefinition;
 import org.jetbrains.annotations.Contract;
 
 import java.io.File;
@@ -39,7 +39,7 @@ public class TextGen {
         return result;
     }
 
-    public static void writeEndPackage(ClassModel classModel, TextGen writer) {
+    public static void writeEndPackage(NameDefinition classModel, TextGen writer) {
         List<String> namespaces = splitTextByTokens(classModel.packageName, '.');
         namespaces.forEach(ns -> {
             writer.write("} ");
@@ -108,9 +108,9 @@ public class TextGen {
         return this;
     }
 
-    public void writePackage(ClassModel classModel) {
-        List<String> namespaces = splitTextByTokens(classModel.packageName, '.');
+    public void writePackage(NameDefinition classModel) {
 
+        List<String> namespaces = TextGen.splitTextByTokens(classModel.packageName, '.');
         namespaces.forEach(ns -> {
             writeFormat("namespace {0} ", ns);
             write("{ ");

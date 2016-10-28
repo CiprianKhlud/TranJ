@@ -19,7 +19,7 @@ public class ProgramTrans {
     public static void main(String[] args)
             throws IOException, ParseException {
 
-        ModelBuilder modelBuilder = new ModelBuilder(".");
+        ModelBuilder modelBuilder = new ModelBuilder("bootstrap");
         modelBuilder.process();
 
         File ouputDir = new File("OutputSrc");
