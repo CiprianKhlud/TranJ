@@ -1,6 +1,7 @@
 package com.khlud.ciprian.tranj.classesmodel;
 
 import com.github.javaparser.ast.type.Type;
+import com.khlud.ciprian.tranj.classesmodel.variables.Variable;
 import com.khlud.ciprian.tranj.resolvers.ResolvedType;
 
 import java.util.ArrayList;
@@ -24,8 +25,10 @@ public class ClassModel extends NameDefinition {
 
     public Variable addVariable(String name, Type type, FileModel fileModel) {
         Variable result = new Variable();
-        result.name = name;
-        result.type = fileModel.resolvedType(type);
+        result.setName(name);
+        ;
+        result.setType(fileModel.resolvedType(type));
+        ;
         variables.add(result);
         return result;
     }
@@ -50,14 +53,14 @@ public class ClassModel extends NameDefinition {
     }
 
     public void buildReferencedTypesTable() {
-        variables.forEach(variable -> addReferencedType(variable.type));
+        variables.forEach(variable -> addReferencedType(variable.getType()));
         methods.forEach(
                 method -> {
                     if (method.returnType != null) {
                         addReferencedType(method.returnType);
                     }
                     method.parameters.forEach(par -> {
-                        addReferencedType(par.type);
+                        addReferencedType(par.getType());
                     });
                 }
         );

@@ -2,7 +2,7 @@ package com.khlud.ciprian.tranj.codegen;
 
 import com.khlud.ciprian.tranj.classesmodel.InterfaceModel;
 import com.khlud.ciprian.tranj.classesmodel.Method;
-import com.khlud.ciprian.tranj.classesmodel.Variable;
+import com.khlud.ciprian.tranj.classesmodel.variables.Variable;
 import com.khlud.ciprian.tranj.resolvers.ResolvedType;
 
 import java.io.File;
@@ -114,8 +114,8 @@ public class HeaderInterfaceGen {
     private void writeVariables(List<Variable> variables) {
         variables.forEach(v -> {
             textGen.writeLineFormat("{0} {1};",
-                    v.type.generateCppDefinition(),
-                    v.name);
+                    v.getType().generateCppDefinition(),
+                    v.getName());
         });
 
     }

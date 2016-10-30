@@ -23,13 +23,13 @@ public class Method {
     public String name;
     public ResolvedType returnType;
     public boolean isStatic;
-    private MethodBody methodBody;
     public boolean isAbstract;
+    private MethodBody methodBody;
 
     public void addParameter(Parameter p, FileModel typeResolver) {
         Argument argument = new Argument();
-        argument.name = p.getId().getName();
-        argument.type = typeResolver.resolvedType(p.getType());
+        argument.setName(p.getId().getName());
+        argument.setType(typeResolver.resolvedType(p.getType()));
         parameters.add(argument);
     }
 
@@ -68,7 +68,7 @@ public class Method {
     public String buildArgumentsText() {
         List<String> argumentTexts = parameters
                 .stream()
-                .map(p -> MessageFormat.format("{0} {1}", p.type.generateCppDefinition(), p.name))
+                .map(p -> MessageFormat.format("{0} {1}", p.getType().generateCppDefinition(), p.getName()))
                 .collect(Collectors.toList());
         return Joiner.on(", ").join(argumentTexts);
     }

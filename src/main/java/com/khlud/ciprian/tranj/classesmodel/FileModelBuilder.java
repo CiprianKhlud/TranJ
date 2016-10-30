@@ -4,6 +4,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.body.*;
 import com.khlud.ciprian.tranj.builders.ModelBuilder;
+import com.khlud.ciprian.tranj.classesmodel.variables.Variable;
 
 import java.util.List;
 
@@ -87,8 +88,8 @@ public class FileModelBuilder {
         member.getVariables()
                 .forEach(var -> {
                     Variable varVal = cls.addVariable(var.getId().getName(), member.getType(), fileModel);
-                    varVal.initialValue = var.getInit();
-                    varVal.isStatic = isStatic;
+                    varVal.setInitialValue(var.getInit());
+                    varVal.setStatic(isStatic);
                 });
 
     }
