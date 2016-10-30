@@ -17,3 +17,5 @@ class Variable : NamedVariable() {
     var isStatic: Boolean = false
     var initialValue: Expression? = null
 }
+
+class Argument : NamedVariable()
