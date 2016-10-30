@@ -1,6 +1,7 @@
 package com.khlud.ciprian.tranj.codegen;
 
 import com.khlud.ciprian.tranj.classesmodel.ClassModel;
+import com.khlud.ciprian.tranj.classesmodel.InterfaceModel;
 
 import java.io.File;
 
@@ -31,6 +32,11 @@ public class QtProjectWriter {
     }
 
     public void writeCode(ClassModel cls) {
+        textGen.writeLineFormat("SOURCES += {0}.cpp", cls.buildBaseName());
+
+    }
+
+    public void writeCode(InterfaceModel cls) {
         textGen.writeLineFormat("SOURCES += {0}.cpp", cls.buildBaseName());
 
     }

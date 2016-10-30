@@ -77,14 +77,13 @@ public class HeaderInterfaceGen {
 
     private void writeMethod(Method method) {
         textGen.writeTabs();
-        if (method.isStatic) {
-            textGen.write("static ");
-        }
+            textGen.write("virtual ");
+
         String returnTypeName = getCppReturnType(method);
         textGen.writeFormat("{0} {1} (", returnTypeName, method.name);
         String argText = method.buildArgumentsText();
         textGen.write(argText);
-        textGen.writeLine(");");
+        textGen.writeLine(") = 0;");
     }
 
     public String getCppReturnType(Method method) {

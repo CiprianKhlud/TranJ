@@ -15,4 +15,11 @@ public class InterfaceModel extends NameDefinition {
 
     public Set<ResolvedType> referencedTypes = new HashSet<>();
     public List<Method> methods = new ArrayList<>();
+    public Method createMethod() {
+
+        Method result = new Method();
+        methods.add(result);
+        result.isAbstract = true;
+        return result;
+    }
 }

@@ -33,7 +33,11 @@ public class FileModelBuilder {
     }
 
     private static void buildFileModel(FileModel result, CompilationUnit compilationUnit) {
-        compilationUnit.getTypes()
+        List<TypeDeclaration> types = compilationUnit.getTypes();
+        if(types==null){
+            return;
+        }
+        types
                 .forEach(typeDeclaration -> {
                     if (typeDeclaration instanceof ClassOrInterfaceDeclaration) {
                         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = (ClassOrInterfaceDeclaration) typeDeclaration;
@@ -49,7 +53,7 @@ public class FileModelBuilder {
             processClass(result, classOrInterfaceDeclaration, result);
 
         } else {
-            processInterface(result, classOrInterfaceDeclaration);
+            processInterface(result, classOrInterfaceDeclaration, result);
 
         }
     }
@@ -89,7 +93,26 @@ public class FileModelBuilder {
 
     }
 
-    private static void processInterface(FileModel result, ClassOrInterfaceDeclaration classOrInterfaceDeclaration) {
+    private static void processInterface(
+            FileModel result,
+            ClassOrInterfaceDeclaration classOrInterfaceDeclaration,
+            FileModel fileModel) {
         InterfaceModel anInterface = result.module.createInterface(classOrInterfaceDeclaration.getName(), result.packageName);
+
+        classOrInterfaceDeclaration.getMembers()
+                .forEach(member -> {
+                    handleMembers(anInterface, member, fileModel);
+                });
     }
+    private static void handleMembers(InterfaceModel cls, BodyDeclaration member, FileModel fileModel) {
+
+        if (member instanceof MethodDeclaration) {
+            handleMethod(cls, (MethodDeclaration) member, fileModel);
+        }
+    }
+    private static void handleMethod(InterfaceModel cls, MethodDeclaration member, FileModel typeResolver) {
+        Method m = cls.createMethod();
+        m.fillMethodProperties(member, typeResolver);
+    }
+
 }

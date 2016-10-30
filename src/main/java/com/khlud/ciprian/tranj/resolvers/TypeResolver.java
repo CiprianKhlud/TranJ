@@ -13,10 +13,10 @@ import static java.lang.System.out;
  */
 public class TypeResolver {
 
-    ReflectionResolver reflectionResolver;
+    ReflectionResolver reflectionResolver = new ReflectionResolver();
 
     public void buildReflectionResolver(List<String> imports) {
-        reflectionResolver = new ReflectionResolver(imports);
+        reflectionResolver.addImports(imports);
     }
 
     public ResolvedType resolve(Type typeToResolve) {

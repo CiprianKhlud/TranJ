@@ -19,25 +19,7 @@ public class ReflectionResolver {
     public Map<String, Class<?>> FixedTypeNames = new HashMap<>();
     public Map<String, Class<?>> FixedTypes = new HashMap<>();
 
-    public ReflectionResolver(List<String> imports) {
-        Imports.add("java.lang");
-        for (String imprt : imports) {
-            if (imprt.endsWith(".*")) {
-                String importSubstracted = imprt.substring(0, imprt.length() - 2);
-                Imports.add(importSubstracted);
-            } else {
-                Class clazz = null;
-                try {
-                    clazz = Class.forName(imprt);
-                } catch (ClassNotFoundException e) {
-                    continue;
-                }
-                FixedTypes.put(imprt, clazz);
-                String fixedTypeName = StringUtils.substringAfterLast(imprt, ".");
-                FixedTypeNames.put(fixedTypeName, clazz);
-            }
-        }
-
+    public ReflectionResolver() {
     }
 
     public boolean hasDefaultConstructor(Class<?> clazz) {
@@ -119,5 +101,25 @@ public class ReflectionResolver {
         String indentedMethodName = StringUtils.indent(name);
         Method mth = getMethod(clz, format("set{0}", indentedMethodName), Optional.of(2));
         return mth;
+    }
+
+    public void addImports(List<String> imports) {
+        Imports.add("java.lang");
+        for (String imprt : imports) {
+            if (imprt.endsWith(".*")) {
+                String importSubstracted = imprt.substring(0, imprt.length() - 2);
+                Imports.add(importSubstracted);
+            } else {
+                Class clazz = null;
+                try {
+                    clazz = Class.forName(imprt);
+                } catch (ClassNotFoundException e) {
+                    continue;
+                }
+                FixedTypes.put(imprt, clazz);
+                String fixedTypeName = StringUtils.substringAfterLast(imprt, ".");
+                FixedTypeNames.put(fixedTypeName, clazz);
+            }
+        }
     }
 }

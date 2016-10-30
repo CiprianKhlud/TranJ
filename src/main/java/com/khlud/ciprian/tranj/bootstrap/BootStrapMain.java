@@ -18,7 +18,7 @@ public class BootStrapMain {
             throws IOException {
 
         //downloadGithubBranch("dmlloyd", "openjdk", "jdk9/jdk9", "repo.zip");
-        Predicate<String> isJava = (f)->f.endsWith(".java")&&!f.endsWith("module-info.java") ;
+        Predicate<String> isJava = (f)->f.endsWith(".java")&&!f.endsWith("module-info.java") && f.contains("/java/lang") ;
         UnzipUtility.unzip("bootstrap/repo.zip", "bootstrap/repo", isJava);
     }
 

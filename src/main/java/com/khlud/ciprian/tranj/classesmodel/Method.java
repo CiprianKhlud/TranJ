@@ -24,6 +24,7 @@ public class Method {
     public ResolvedType returnType;
     public boolean isStatic;
     private MethodBody methodBody;
+    public boolean isAbstract;
 
     public void addParameter(Parameter p, FileModel typeResolver) {
         Argument argument = new Argument();
